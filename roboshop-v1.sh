@@ -21,7 +21,7 @@ do
     echo "$instance ID : $instance_id"
 
     if [ $instance != "frontend" ]; then
-        IP=$( aws ec2 describe-instances \
+        IP=$(aws ec2 describe-instances \
                 --instance-ids $instance_id \
                 --query 'Reservations[].Instances[].PrivateIpAddress' \
                 --output text)
@@ -44,10 +44,10 @@ do
       {
         "Action": "UPSERT",
         "ResourceRecordSet": {
-          "Name": "$r53_record",
+          "Name": "'$r53_record'",
           "Type": "A",
           "TTL": 1,
-          "ResourceRecords": [{"Value": "$IP"}]
+          "ResourceRecords": [{"Value": "'$IP'"}]
         }
       }
     ]
