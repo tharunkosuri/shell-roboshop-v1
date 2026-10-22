@@ -32,18 +32,18 @@ validate(){
 echo "${timestamp} [INFO] ====== Script started execution ======" | tee -a $logs_file
 
 cp rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
-validate &? "Adding rabbitmq.repo"
+validate $? "Adding rabbitmq.repo"
 
 dnf install erlang rabbitmq-server -y &>> $logs_file
-validate &? "Installing rabbitmq server"
+validate $? "Installing rabbitmq server"
 
 systemctl enable rabbitmq-server &>> $logs_file
 systemctl start rabbitmq-server &>> $logs_file
-validate &? "Enable and Starting RabbitMQ server"
+validate $? "Enable and Starting RabbitMQ server"
 
 rabbitmqctl add_user roboshop roboshop123 &>> $logs_file
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>> $logs_file
-validate &? "Creating RabbitMQ user for Roboshop"
+validate $? "Creating RabbitMQ user for Roboshop"
 
 echo "${timestamp} [INFO] Script Completed in $SECONDS seconds" | tee -a $logs_file
 echo "${timestamp} [INFO] ====== Script Completed execution ======" | tee -a $logs_file
