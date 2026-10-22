@@ -38,7 +38,7 @@ dnf module enable nodejs:24 -y &>> $logs_file
 dnf install nodejs -y &>> $logs_file
 validate $? "Instaling Nodejs 24"
 
-id roboshop &?>> logs_file
+id roboshop &?>> $logs_file
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> $logs_file
     validate $? "Creating the system user for Nodejs"
@@ -76,7 +76,7 @@ validate $? "validate mongo.repo"
 dnf install mongodb-mongosh -y &>> $logs_file
 validate $? "Installing MongoDB Client"
 
-product_count=$(mongosh --host mongodb.${domain_name} --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()' 2>> $logs_file)
+product_count=$(mongosh --host mongodb.${domain_name} --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()')
 validate $? "Connecting to MongoDB"
 
 if [${product_count} -eq 0 ]; then
