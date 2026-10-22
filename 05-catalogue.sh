@@ -23,27 +23,27 @@ timestamp(){
 
 validate(){
     if [ $1 -ne 0 ]; then
-        echo -e "${timestamp} [ERROR] ${2}... is ${R}failed${N}" | tee -a $logs_file  # It will show in screen as well as in logs file
+        echo -e "$(timestamp) [ERROR] ${2}... is ${R}failed${N}" | tee -a $logs_file  # It will show in screen as well as in logs file
         exit 1
     else
-         echo -e "${timestamp} [INFO] ${2}... is ${G}success${N}" | tee -a $logs_file # It will show in screen as well as in logs file
+         echo -e "$(timestamp) [INFO] ${2}... is ${G}success${N}" | tee -a $logs_file # It will show in screen as well as in logs file
     fi
 
 }
 
-echo "${timestamp} [INFO] ====== Script started execution ======" | tee -a $logs_file
+echo "$(timestamp) [INFO] ====== Script started execution ======" | tee -a $logs_file
 
 dnf module disable nodejs -y &>> $logs_file
 dnf module enable nodejs:24 -y &>> $logs_file
 dnf install nodejs -y &>> $logs_file
 validate $? "Instaling Nodejs 24"
 
-id roboshop &?>> $logs_file
+id roboshop &>> $logs_file
 if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> $logs_file
     validate $? "Creating the system user for Nodejs"
 else 
-    echo -e "${timestamp} [INFO] System user Roboshop already exixt.. ${Y}SKIPPING${N}"
+    echo -e "$(timestamp) [INFO] System user Roboshop already exixt.. ${Y}SKIPPING${N}"
 fi
 
 rm -rf /app
@@ -62,7 +62,7 @@ validate $? "Unzipping Catalogue"
 npm install &>> $logs_file
 validate $? "Installing dependencies"
 
-sed -i "s/DOMAIN_NAME/domain_name/g" "$scripts_dir/catalogue.service"
+sed -i "s/DOMAIN_NAME/$domain_name/g" "$scripts_dir/catalogue.service"
 cp "$scripts_dir/catalogue.service" /etc/systemd/system/catalogue.service
 
 systemctl daemon-reload &>> $logs_file
@@ -79,16 +79,16 @@ validate $? "Installing MongoDB Client"
 product_count=$(mongosh --host mongodb.${domain_name} --quiet --eval 'db.getSiblingDB("catalogue").products.countDocuments()')
 validate $? "Connecting to MongoDB"
 
-if [${product_count} -eq 0 ]; then
+if [ ${product_count} -eq 0 ]; then
     mongosh --host "mongodb.${domain_name}" </app/db/master-data.js
     validate $? "Loading Products"
 else 
-    echo "${timestamp} [INFO] Products are already loaded.. ${Y}SKIPPING${N}"
+    echo "$(timestamp) [INFO] Products are already loaded.. ${Y}SKIPPING${N}"
 fi
 
 systemctl restart catalogue &>> $logs_file
 validate $? "Restarting Catalogue"
 
-echo "${timestamp} [INFO] Script Completed in $SECONDS seconds" | tee -a $logs_file
-echo "${timestamp} [INFO] ====== Script Completed execution ======" | tee -a $logs_file
+echo "$(timestamp) [INFO] Script Completed in $SECONDS seconds" | tee -a $logs_file
+echo "$(timestamp) [INFO] ====== Script Completed execution ======" | tee -a $logs_file
 
