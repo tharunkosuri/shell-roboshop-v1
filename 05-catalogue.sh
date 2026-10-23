@@ -34,7 +34,11 @@ validate(){
 echo "$(timestamp) [INFO] ====== Script started execution ======" | tee -a $logs_file
 
 dnf module disable nodejs -y &>> $logs_file
+validate $? "Disabling Node.js module"
+
 dnf module enable nodejs:24 -y &>> $logs_file
+validate $? "Enabling Node.js 24 module"
+
 dnf install nodejs -y &>> $logs_file
 validate $? "Installing nodejs 24"
 
@@ -52,7 +56,7 @@ validate $? "Removing old code"
 mkdir -p /app &>> $logs_file
 validate $? "Creating app directory"
 
-curl -L -o /tmp/catalogue.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/catalogue-v4.zip &>> $logs_file
+curl -L -o /tmp/catalogue.zip https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/catalogue-v4.zip
 validate $? "Downloading Catalogue"
 
 cd /app
