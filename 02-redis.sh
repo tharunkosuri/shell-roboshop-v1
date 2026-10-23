@@ -21,15 +21,15 @@ timestamp(){
 
 validate(){
     if [ $1 -ne 0 ]; then
-        echo -e "${timestamp} [ERROR] ${2}... is ${R}failed${N}" | tee -a $logs_file  # It will show in screen as well as in logs file
+        echo -e "$(timestamp) [ERROR] ${2}... is ${R}failed${N}" | tee -a $logs_file  # It will show in screen as well as in logs file
         exit 1
     else
-         echo -e "${timestamp} [INFO] ${2}... is ${G}success${N}" | tee -a $logs_file # It will show in screen as well as in logs file
+         echo -e "$(timestamp) [INFO] ${2}... is ${G}success${N}" | tee -a $logs_file # It will show in screen as well as in logs file
     fi
 
 }
 
-echo "${timestamp} [INFO] ====== Script started execution ======" | tee -a $logs_file
+echo "$(timestamp) [INFO] ====== Script started execution ======" | tee -a $logs_file
 
 dnf module disable redis -y &>> $logs_file
 dnf module enable redis:7 -y &>> $logs_file
@@ -43,5 +43,5 @@ systemctl enable redis &>> $logs_file
 systemctl start redis &>> $logs_file
 validate $? "Enable and Starting Redis" 
 
-echo "${timestamp} [INFO] Script Completed in $SECONDS seconds" | tee -a $logs_file
-echo "${timestamp} [INFO] ====== Script Completed execution ======" | tee -a $logs_file
+echo "$(timestamp) [INFO] Script Completed in $SECONDS seconds" | tee -a $logs_file
+echo "$(timestamp) [INFO] ====== Script Completed execution ======" | tee -a $logs_file

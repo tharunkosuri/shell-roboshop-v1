@@ -70,7 +70,7 @@ systemctl enable catalogue &>> $logs_file
 systemctl start catalogue &>> $logs_file
 validate $? "enabling and starting catalogue"
 
-cp "$scripts_dir/catalogue.service" /etc/yum.repos.d/mongo.repo
+cp "$scripts_dir/mongo.repo" /etc/yum.repos.d/mongo.repo
 validate $? "validate mongo.repo"
 
 dnf install mongodb-mongosh -y &>> $logs_file

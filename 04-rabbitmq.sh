@@ -21,15 +21,15 @@ timestamp(){
 
 validate(){
     if [ $1 -ne 0 ]; then
-        echo -e "${timestamp} [ERROR] ${2}... is ${R}failed${N}" | tee -a $logs_file  # It will show in screen as well as in logs file
+        echo -e "$(timestamp) [ERROR] ${2}... is ${R}failed${N}" | tee -a $logs_file  # It will show in screen as well as in logs file
         exit 1
     else
-         echo -e "${timestamp} [INFO] ${2}... is ${G}success${N}" | tee -a $logs_file # It will show in screen as well as in logs file
+         echo -e "$(timestamp) [INFO] ${2}... is ${G}success${N}" | tee -a $logs_file # It will show in screen as well as in logs file
     fi
 
 }
 
-echo "${timestamp} [INFO] ====== Script started execution ======" | tee -a $logs_file
+echo "$(timestamp) [INFO] ====== Script started execution ======" | tee -a $logs_file
 
 cp rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
 validate $? "Adding rabbitmq.repo"
@@ -46,11 +46,11 @@ if [ $? -ne 0 ]; then
     rabbitmqctl add_user roboshop roboshop123 &>> $logs_file
     validate $? "Creating RabbitMQ user for Roboshop"
 else
-    echo -e "${timestamp} [INFO] RabbitMQ user already exist...${Y}SKIPING${N}"
+    echo -e "$(timestamp) [INFO] RabbitMQ user already exist...${Y}SKIPING${N}"
 fi
 
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>> $logs_file
 validate $? "Setting permissions for RabbitMQ user for Roboshop"
 
-echo "${timestamp} [INFO] Script Completed in $SECONDS seconds" | tee -a $logs_file
-echo "${timestamp} [INFO] ====== Script Completed execution ======" | tee -a $logs_file
+echo "$(timestamp) [INFO] Script Completed in $SECONDS seconds" | tee -a $logs_file
+echo "$(timestamp) [INFO] ====== Script Completed execution ======" | tee -a $logs_file

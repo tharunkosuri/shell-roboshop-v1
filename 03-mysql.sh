@@ -21,15 +21,15 @@ timestamp(){
 
 validate(){
     if [ $1 -ne 0 ]; then
-        echo -e "${timestamp} [ERROR] ${2}... is ${R}failed${N}" | tee -a $logs_file  # It will show in screen as well as in logs file
+        echo -e "$(timestamp) [ERROR] ${2}... is ${R}failed${N}" | tee -a $logs_file  # It will show in screen as well as in logs file
         exit 1
     else
-         echo -e "${timestamp} [INFO] ${2}... is ${G}success${N}" | tee -a $logs_file # It will show in screen as well as in logs file
+         echo -e "$(timestamp) [INFO] ${2}... is ${G}success${N}" | tee -a $logs_file # It will show in screen as well as in logs file
     fi
 
 }
 
-echo "${timestamp} [INFO] ====== Script started execution ======" | tee -a $logs_file
+echo "$(timestamp) [INFO] ====== Script started execution ======" | tee -a $logs_file
 
 dnf module enable mysql:8.4 -y &>> $logs_file
 dnf install mysql-server -y &>> $logs_file
@@ -42,6 +42,6 @@ validate $? "Enabling and Starting mysql server"
 mysql_secure_installation --set-root-pass RoboShop@1 &>> $logs_file
 validate $? "Setup mysql root password"
 
-echo "${timestamp} [INFO] Script Completed in $SECONDS seconds" | tee -a $logs_file
-echo "${timestamp} [INFO] ====== Script Completed execution ======" | tee -a $logs_file
+echo "$(timestamp) [INFO] Script Completed in $SECONDS seconds" | tee -a $logs_file
+echo "$(timestamp) [INFO] ====== Script Completed execution ======" | tee -a $logs_file
 
