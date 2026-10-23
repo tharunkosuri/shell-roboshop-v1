@@ -36,7 +36,7 @@ echo "$(timestamp) [INFO] ====== Script started execution ======" | tee -a $logs
 dnf module disable nodejs -y &>> $logs_file
 dnf module enable nodejs:24 -y &>> $logs_file
 dnf install nodejs -y &>> $logs_file
-validate $? "Instaling Nodejs 24"
+validate $? "Installing nodejs 24"
 
 id roboshop &>> $logs_file
 if [ $? -ne 0 ]; then
